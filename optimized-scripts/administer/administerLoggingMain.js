@@ -1,0 +1,22 @@
+/*
+ * Copyright (C) 2005 - 2020 TIBCO Software Inc. All rights reserved.
+ * http://www.jaspersoft.com.
+ *
+ * Unless you have purchased a commercial license agreement from Jaspersoft,
+ * the following license terms apply:
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+define("administer/administer.base",["require","exports","module","prototype","underscore","../core/core.ajax","../core/core.ajax.utils"],function(e,n,t){var i=e("prototype"),o=i.Template,r=e("underscore"),s=e("../core/core.ajax"),a=s.ajaxTargettedUpdate,l=s.AjaxRequester,d=e("../core/core.ajax.utils"),u=d.baseErrorHandler;void 0===window.Administer&&(window.Administer={}),window.Administer=r.extend({_messages:{},urlContext:null,getMessage:function(e,n){var t=this._messages[e];return t?new o(t).evaluate(n||{}):""},menuActions:{"p#navAnalysisOptions":function(){return window.Administer.urlContext+"/flow.html?_flowId=mondrianPropertiesFlow"},"p#navAnalysisOptionsCE":function(){return window.Administer.urlContext+"/olap/properties.html"},"p#navDesignerOptions":function(){return window.Administer.urlContext+"/flow.html?_flowId=designerOptionsFlow"},"p#navDesignerCache":function(){return window.Administer.urlContext+"/flow.html?_flowId=designerCacheFlow"},"p#navAwsSettings":function(){return window.Administer.urlContext+"/flow.html?_flowId=awsSettingsFlow"},"p#navLogSettings":function(){return window.Administer.urlContext+"/log_settings.html"},"p#logCollectors":function(){return window.Administer.urlContext+"/logCollectors.html"},"p#navImport":function(){return window.Administer.urlContext+"/adminImport.html"},"p#navExport":function(){return window.Administer.urlContext+"/adminExport.html"},"p#navCustomAttributes":function(){return window.Administer.urlContext+"/customAttributes.html"},"p#navResetSettings":function(){return window.Administer.urlContext+"/resetSettings.html"}},_sendRequest:function(e,n,t){a(e,{postData:n,callback:t,mode:l.prototype.EVAL_JSON,errorHandler:this._errorHandler})},_errorHandler:function(e){return e.getResponseHeader("LoginRequested")?(window.location="flow.html?_flowId=designerCacheFlow",!0):u(e)}},window.Administer),t.exports=window.Administer}),define("administer/administer.logging",["require","exports","module","prototype","../core/core.layout","../util/utils.common","./administer.base","../components/components.webHelp","jquery"],function(e,n,t){var i=e("prototype"),o=i.$,r=e("../core/core.layout"),s=e("../util/utils.common"),a=s.matchAny,l=e("./administer.base"),d=e("../components/components.webHelp"),u=e("jquery"),m={initialize:function(){r.resizeOnClient("serverSettingsMenu","settings"),d.setCurrentContext("admin"),this.initEvents()},initEvents:function(){var e=this;o("display").observe("click",function(e){var n=e.element(),t=a(n,[r.BUTTON_PATTERN],!0);if(t)for(var i in l.menuActions)if(t.match(i)&&!t.up("li").hasClassName("selected"))return void(document.location=l.menuActions[i]())}),u(".js-logSettings select").on("change",function(n){var t,i=u(n.target);t=i.hasClass("js-newLogger")?u("#newLoggerName").val():i.parent().prev().text(),e._setLevel(encodeURIComponent(t),i.val())})},_setLevel:function(e,n){document.location="log_settings.html?logger="+e+"&level="+n}};void 0===e&&document.observe("dom:loaded",function(){m.initialize()}),t.exports=m}),define("administer/administerLoggingMain",["require","exports","module","requirejs-domready","../administer/administer.logging","../administer/administer.base","runtime_dependencies/js-sdk/src/jrs.configs"],function(e,n,t){var i=e("requirejs-domready"),o=e("../administer/administer.logging"),r=e("../administer/administer.base"),s=e("runtime_dependencies/js-sdk/src/jrs.configs");i(function(){r.urlContext=s.urlContext,o.initialize()})});
